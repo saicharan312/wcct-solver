@@ -1,17 +1,23 @@
 steps:
-- name: 'gcr.io/cloud-builders/docker'
-args: ['build','-t','gcr.io/waas-459615/wcct-solver:$SHORT_SHA','.']
-- name: 'gcr.io/cloud-builders/docker'
-args: ['push','gcr.io/waas-459615/wcct-solver:$SHORT_SHA']
-- name: 'gcr.io/cloud-builders/gcloud'
-entrypoint: gcloud
-args:
-- run
-- deploy
-- wcct-solver
-- --image=gcr.io/waas-459615/wcct-solver:$SHORT_SHA
-- --platform=managed
-- --region=us-central1
-- --allow-unauthenticated
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/waas-459615/wcct-solver:$SHORT_SHA', '.']
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/waas-459615/wcct-solver:$SHORT_SHA']
+
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: 'gcloud'
+    args:
+      - run
+      - deploy
+      - wcct-solver
+      - --image=gcr.io/waas-459615/wcct-solver:$SHORT_SHA
+      - --platform=managed
+      - --region=us-central1
+      - --allow-unauthenticated
+      - --memory=1Gi
+      - --cpu=1
+      - --timeout=300
+
 images:
-- 'gcr.io/waas-459615/wcct-solver:$SHORT_SHA'
+  - 'gcr.io/waas-459615/wcct-solver:$SHORT_SHA'
